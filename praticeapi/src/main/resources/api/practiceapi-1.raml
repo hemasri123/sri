@@ -1,0 +1,43 @@
+#%RAML 1.0
+title: PracticeAPI-1
+version: V.0
+description: "This is for practice example"
+protocols:
+  - HTTP
+traits:
+  reuse: !include traits/reusecode.raml  
+mediaType: 
+- application/json
+/addition :
+  get:
+    is : [reuse]
+    responses:
+      200:
+        body:
+          application/json:
+            example: !includeexample-1/addition-response.json
+              
+      
+/subtration :
+  delete:
+  patch:
+  put:
+  post:
+          is: [reuse]
+          responses:
+            200:
+              body:
+                application/json:
+                  example: !include Example-1/Subtration-response.json
+            
+
+    
+
+                              
+          
+                    
+  
+
+
+
+
