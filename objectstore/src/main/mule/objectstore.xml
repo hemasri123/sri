@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:os="http://www.mulesoft.org/schema/mule/os"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="749631ce-3168-4256-a87b-6914c5a9f272">
+		<http:listener-connection host="localhost" port="8081" />
+	</http:listener-config>
+	<os:object-store name="sri" doc:name="Object store" doc:id="13288836-1716-4f4c-a820-ed3e2ccb94e4" />
+	<flow name="objectstoreFlow" doc:id="0054a6de-01cb-475f-8331-91274ca8dd5a" >
+		<http:listener doc:name="Listener" doc:id="0a3e626d-7d97-4c89-ae8e-07dd27676f41" config-ref="HTTP_Listener_config" path="/os"/>
+		<os:store doc:id="d75db5f1-007c-4af1-af6a-a8030dd1af33" key="name" objectStore="sri">
+			<os:value ><![CDATA[jesus]]></os:value>
+		</os:store>
+		<logger level="INFO" doc:name="Logger" doc:id="c135a6a6-823f-4a58-80ea-63222f7d5733" message="#[payload]"/>
+	</flow>
+	<flow name="objectstoreFlow1" doc:id="68aa543e-f6b7-4b19-9e52-e80a30a5993a" >
+		<http:listener doc:name="Listener" doc:id="f92ef904-dab8-4a75-85cd-aac11e0f9943" config-ref="HTTP_Listener_config" path="/retriveall"/>
+		<os:retrieve-all doc:name="Retrieve all" doc:id="4fad3c98-4691-4a46-854e-0d2d7ac1cb56" objectStore="sri"/>
+		<ee:transform doc:name="Transform Message" doc:id="f93d06c6-0fc9-475f-9e33-a129d549e6d7" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="b8157271-47ed-4bcd-9925-a56ef3dcde17" message="#[payload]"/>
+	</flow>
+	<flow name="objectstoreFlow3" doc:id="a7696802-b437-4cb0-a4a2-acf9b7ea7e62" >
+		<http:listener doc:name="Listener" doc:id="5e06869a-7f0b-44e7-a682-1968890b503e" config-ref="HTTP_Listener_config" path="/contains"/>
+		<os:contains doc:name="Contains" doc:id="2ff4f94a-7003-4f48-b72f-4611f2282a37" key="name" objectStore="sri"/>
+	</flow>
+	<flow name="objectstoreFlow2" doc:id="ac318dde-ae81-4876-b3fa-c01d6fcb6c5d" >
+		<http:listener doc:name="Listener" doc:id="bb44d2cb-713c-4616-a202-6ae5a968de36" config-ref="HTTP_Listener_config" path="/retrive"/>
+		<os:retrieve doc:name="Retrieve" doc:id="c5c36761-2830-49f9-a50e-b729ff76e501" key="name" objectStore="sri"/>
+	</flow>
+</mule>
