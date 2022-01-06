@@ -1,0 +1,23 @@
+#%RAML 1.0
+title: Sekharzinchema
+version: v4
+description: Marrige couple
+protocols:
+  - HTTP
+traits:
+    reuse : !include traits/reuseable.raml
+/Family :
+  post:
+ 
+     
+    body:
+      application/json:
+        example: !include Example/request.json
+          
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include Example/response.json
+              
+      
